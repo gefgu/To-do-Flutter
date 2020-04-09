@@ -145,7 +145,6 @@ class _TodoListState extends State<TodoList> {
       ),
       decoration: new BoxDecoration(
         border: Border(bottom: BorderSide(color: colorsScheme[0], width: 4.0)),
-        color: Colors.black12,
       ),
     );
   }
