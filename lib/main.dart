@@ -101,6 +101,8 @@ class _TodoListState extends State<TodoList> {
             ),
             onPressed: () => _pushMarkAsDone(todo),
             iconSize: 24.0,
+            splashColor: Colors.black12,
+            highlightColor: Colors.black12,
           ),
           Expanded(
             child: Container(
@@ -113,11 +115,20 @@ class _TodoListState extends State<TodoList> {
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            iconSize: 18.0,
-            onPressed: () => {},
-          )
+          PopupMenuButton<String>(
+            initialValue: "None",
+            onSelected: (choice) {
+              if (choice == "Edit") {
+                _pushEditTodoScreen(todo);
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: "Edit",
+                child: Text("Edit"),
+              )
+            ],
+          ),
         ],
       ),
       decoration: new BoxDecoration(
@@ -198,4 +209,40 @@ class _TodoListState extends State<TodoList> {
       });
     });
   }
+
+  void _pushEditTodoScreen(Todo todo) {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Add Todo"),
+        ),
+        body: Container(
+          child: new TextField(
+            controller: new TextEditingController()..text = todo.title,
+            autofocus: true,
+            decoration: new InputDecoration(
+              contentPadding: const EdgeInsets.all(8.0),
+              hintText: "Edit Todo",
+            ),
+            onSubmitted: (result) {
+              todo.title = result;
+              editTodo(todo);
+              Navigator.pop(context);
+            },
+          ),
+          padding: const EdgeInsets.all(16.0),
+        ),
+      );
+    }));
+  }
+
+  void editTodo(Todo todo) {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    helper.update(todo).then((result) {
+      setState(() {
+        getTodosFromDatabase();
+      });
+    });
+  }
 }
+
