@@ -100,7 +100,7 @@ class _TodoListState extends State<TodoList> {
 
   Widget todoTile(Todo todo) {
     return new Container(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -146,7 +146,7 @@ class _TodoListState extends State<TodoList> {
         ],
       ),
       decoration: new BoxDecoration(
-        border: Border(bottom: BorderSide(color: colorsScheme[0], width: 4.0)),
+        border: Border(bottom: BorderSide(color: colorsScheme[0], width: 1.0)),
       ),
     );
   }
@@ -161,8 +161,8 @@ class _TodoListState extends State<TodoList> {
           child: new TextField(
             autofocus: true,
             decoration: new InputDecoration(
-              contentPadding: const EdgeInsets.all(8.0),
               hintText: "Add Todo",
+              contentPadding: EdgeInsets.only(bottom: -16.0, left: 4.0),
             ),
             onSubmitted: (result) {
               addTodo(result);
@@ -209,6 +209,7 @@ class _TodoListState extends State<TodoList> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                padding: const EdgeInsets.all(8.0),
               ),
               FlatButton(
                 child: Text("Mark as Done", style: TextStyle(fontSize: 18.0)),
@@ -216,6 +217,7 @@ class _TodoListState extends State<TodoList> {
                   deleteTodo(todo.id);
                   Navigator.of(context).pop();
                 },
+                padding: const EdgeInsets.all(8.0),
               )
             ],
           );
@@ -245,8 +247,8 @@ class _TodoListState extends State<TodoList> {
             controller: controller,
             autofocus: true,
             decoration: new InputDecoration(
-              contentPadding: const EdgeInsets.all(8.0),
               hintText: "Edit Todo",
+              contentPadding: EdgeInsets.only(bottom: -16.0, left: 4.0),
             ),
             onSubmitted: (result) {
               todo.title = result;
