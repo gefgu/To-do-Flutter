@@ -3,6 +3,13 @@ import 'package:tododark/database_helpers.dart';
 
 void main() => runApp(MyApp());
 
+const List<Color> colorsScheme = [
+  Color(0xFF90AFC5),
+  Color(0xFF336887),
+  Color(0xFF2A3132),
+  Color(0xFF763626)
+];
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -11,9 +18,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo Knight',
       theme: ThemeData(
-        primaryColor: Colors.blueGrey,
+        primaryColor: colorsScheme[1],
         brightness: Brightness.dark,
-        accentColor: Colors.blueGrey,
+        accentColor: colorsScheme[1],
       ),
       home: new TodoList(),
     );
@@ -57,7 +64,9 @@ class _TodoListState extends State<TodoList> {
                 if (index < todoList.length) {
                   return todoTile(todoList[index]);
                 } else {
-                  return SizedBox(height: 60,);
+                  return SizedBox(
+                    height: 60,
+                  );
                 }
               });
         } else if (snapshot.hasError) {
@@ -77,6 +86,7 @@ class _TodoListState extends State<TodoList> {
     );
 
     return new Scaffold(
+      backgroundColor: colorsScheme[2],
       appBar: new AppBar(
         title: new Text("Todo Knigth"),
       ),
@@ -97,25 +107,24 @@ class _TodoListState extends State<TodoList> {
           IconButton(
             icon: Icon(
               Icons.check_circle_outline,
-              color: Colors.white,
             ),
             onPressed: () => _pushMarkAsDone(todo),
             iconSize: 24.0,
-            splashColor: Colors.black12,
-            highlightColor: Colors.black12,
+            splashColor: colorsScheme[2],
+            highlightColor: colorsScheme[2],
           ),
           Expanded(
             child: Container(
               child: Text(
                 '${todo.title}',
-                style: new TextStyle(
-                  fontSize: 18.0,
-                ),
+                style: new TextStyle(fontSize: 18.0, height: 1.75),
               ),
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             ),
           ),
           PopupMenuButton<String>(
+            color: colorsScheme[3],
+            icon: Icon(Icons.more_vert),
             initialValue: "None",
             onSelected: (choice) {
               if (choice == "Edit") {
@@ -125,15 +134,17 @@ class _TodoListState extends State<TodoList> {
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: "Edit",
-                child: Text("Edit"),
+                child: Text(
+                  "Edit",
+                  style: TextStyle(fontSize: 18.0),
+                ),
               )
             ],
           ),
         ],
       ),
       decoration: new BoxDecoration(
-        border:
-          Border(bottom: BorderSide(color: Colors.blueGrey, width: 4.0)),
+        border: Border(bottom: BorderSide(color: colorsScheme[0], width: 4.0)),
         color: Colors.black12,
       ),
     );
@@ -211,14 +222,17 @@ class _TodoListState extends State<TodoList> {
   }
 
   void _pushEditTodoScreen(Todo todo) {
+    final TextEditingController controller = TextEditingController()
+      ..text = todo.title;
+
     Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Add Todo"),
+          title: new Text("Edit Todo"),
         ),
         body: Container(
           child: new TextField(
-            controller: new TextEditingController()..text = todo.title,
+            controller: controller,
             autofocus: true,
             decoration: new InputDecoration(
               contentPadding: const EdgeInsets.all(8.0),
@@ -245,4 +259,3 @@ class _TodoListState extends State<TodoList> {
     });
   }
 }
-
