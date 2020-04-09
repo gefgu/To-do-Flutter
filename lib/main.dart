@@ -48,17 +48,22 @@ class _TodoListState extends State<TodoList> {
       future: getTodosFromDatabase(),
       // ignore: missing_return
       builder: (context, snapshot) {
+        Widget widgetReturn;
         if (snapshot.hasData) {
-          return ListView.builder(
+          widgetReturn = ListView.builder(
               padding: const EdgeInsets.all(16.0),
-              itemCount: todoList.length,
+              itemCount: todoList.length + 1,
               itemBuilder: (BuildContext context, int index) {
-                return todoTile(todoList[index]);
+                if (index < todoList.length) {
+                  return todoTile(todoList[index]);
+                } else {
+                  return SizedBox(height: 60,);
+                }
               });
         } else if (snapshot.hasError) {
-          return Text("Error");
+          widgetReturn = Text("Error");
         } else {
-          return Center(
+          widgetReturn = Center(
             child: SizedBox(
               height: 40,
               width: 40,
@@ -66,6 +71,8 @@ class _TodoListState extends State<TodoList> {
             ),
           );
         }
+
+        return widgetReturn;
       },
     );
 
@@ -83,7 +90,7 @@ class _TodoListState extends State<TodoList> {
 
   Widget todoTile(Todo todo) {
     return new Container(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 4.0),
+      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -106,11 +113,18 @@ class _TodoListState extends State<TodoList> {
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             ),
           ),
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            iconSize: 18.0,
+            onPressed: () => {},
+          )
         ],
       ),
       decoration: new BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: Colors.blueGrey, width: 1.0))),
+        border:
+          Border(bottom: BorderSide(color: Colors.blueGrey, width: 4.0)),
+        color: Colors.black12,
+      ),
     );
   }
 
@@ -120,16 +134,19 @@ class _TodoListState extends State<TodoList> {
         appBar: new AppBar(
           title: new Text("Add Todo"),
         ),
-        body: new TextField(
-          autofocus: true,
-          decoration: new InputDecoration(
-            contentPadding: const EdgeInsets.all(8.0),
-            hintText: "Add Todo",
+        body: Container(
+          child: new TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              contentPadding: const EdgeInsets.all(8.0),
+              hintText: "Add Todo",
+            ),
+            onSubmitted: (result) {
+              addTodo(result);
+              Navigator.pop(context);
+            },
           ),
-          onSubmitted: (result) {
-            addTodo(result);
-            Navigator.pop(context);
-          },
+          padding: const EdgeInsets.all(16.0),
         ),
       );
     }));
