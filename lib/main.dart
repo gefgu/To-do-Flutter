@@ -112,6 +112,7 @@ class _TodoListState extends State<TodoList> {
             iconSize: 24.0,
             splashColor: colorsScheme[2],
             highlightColor: colorsScheme[2],
+            padding: EdgeInsets.only(top: 8.0),
           ),
           Expanded(
             child: Container(
@@ -123,6 +124,7 @@ class _TodoListState extends State<TodoList> {
             ),
           ),
           PopupMenuButton<String>(
+            padding: EdgeInsets.only(top: 8.0),
             color: colorsScheme[1],
             icon: Icon(Icons.more_vert),
             initialValue: "None",
