@@ -7,7 +7,7 @@ const List<Color> colorsScheme = [
   Color(0xFF90AFC5),
   Color(0xFF336887),
   Color(0xFF2A3132),
-  Color(0xFF763626)
+  Color(0xFF2C7873)
 ];
 
 class MyApp extends StatelessWidget {
@@ -123,7 +123,7 @@ class _TodoListState extends State<TodoList> {
             ),
           ),
           PopupMenuButton<String>(
-            color: colorsScheme[3],
+            color: colorsScheme[1],
             icon: Icon(Icons.more_vert),
             initialValue: "None",
             onSelected: (choice) {
@@ -192,16 +192,25 @@ class _TodoListState extends State<TodoList> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("You are sure to mark ${todo.title} as done?"),
+            backgroundColor: colorsScheme[3],
+            title: new Text(
+              "You are sure to mark ${todo.title} as done?",
+              style: TextStyle(
+                height: 1.5,
+              ),
+            ),
             actions: <Widget>[
               FlatButton(
-                child: Text("Cancel"),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(fontSize: 18.0),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text("Mark as Done"),
+                child: Text("Mark as Done", style: TextStyle(fontSize: 18.0)),
                 onPressed: () {
                   deleteTodo(todo.id);
                   Navigator.of(context).pop();
