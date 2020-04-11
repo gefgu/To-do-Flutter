@@ -7,7 +7,8 @@ const List<Color> colorsScheme = [
   Color(0xFF90AFC5),
   Color(0xFF336887),
   Color(0xFF2A3132),
-  Color(0xFF2C7873)
+  Color(0xFF2C7873),
+  Color(0xFF763626)
 ];
 
 class MyApp extends StatelessWidget {
@@ -108,23 +109,26 @@ class _TodoListState extends State<TodoList> {
             icon: Icon(
               Icons.check_circle_outline,
             ),
-            onPressed: () => _pushMarkAsDone(todo),
+            onPressed: () => _pushAlertOfDelete(
+                todo,
+                "You are sure to mark ${todo.title} as done?",
+                "Mark as Done",
+                colorsScheme[3]),
             iconSize: 24.0,
             splashColor: colorsScheme[2],
             highlightColor: colorsScheme[2],
-            padding: EdgeInsets.only(top: 8.0),
           ),
           Expanded(
             child: Container(
               child: Text(
                 '${todo.title}',
-                style: new TextStyle(fontSize: 18.0, height: 1.75),
+                style: new TextStyle(fontSize: 18.0, height: 1.25),
               ),
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              padding: const EdgeInsets.only(
+                  left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
             ),
           ),
           PopupMenuButton<String>(
-            padding: EdgeInsets.only(top: 8.0),
             color: colorsScheme[1],
             icon: Icon(Icons.more_vert),
             initialValue: "None",
@@ -132,12 +136,26 @@ class _TodoListState extends State<TodoList> {
               if (choice == "Edit") {
                 _pushEditTodoScreen(todo);
               }
+              if (choice == "Delete") {
+                _pushAlertOfDelete(
+                    todo,
+                    "Are you sure to delete ${todo.title}?",
+                    "Delete",
+                    colorsScheme[4]);
+              }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: "Edit",
                 child: Text(
                   "Edit",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: "Delete",
+                child: Text(
+                  "Delete",
                   style: TextStyle(fontSize: 18.0),
                 ),
               )
@@ -188,14 +206,15 @@ class _TodoListState extends State<TodoList> {
     });
   }
 
-  void _pushMarkAsDone(Todo todo) {
+  void _pushAlertOfDelete(
+      Todo todo, String alertText, String confirmText, Color color) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: colorsScheme[3],
+            backgroundColor: color,
             title: new Text(
-              "You are sure to mark ${todo.title} as done?",
+              alertText,
               style: TextStyle(
                 height: 1.5,
               ),
@@ -212,7 +231,7 @@ class _TodoListState extends State<TodoList> {
                 padding: const EdgeInsets.all(8.0),
               ),
               FlatButton(
-                child: Text("Mark as Done", style: TextStyle(fontSize: 18.0)),
+                child: Text(confirmText, style: TextStyle(fontSize: 18.0)),
                 onPressed: () {
                   deleteTodo(todo.id);
                   Navigator.of(context).pop();
