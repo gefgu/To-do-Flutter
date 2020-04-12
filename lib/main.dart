@@ -38,12 +38,6 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   List<Todo> todoList;
 
-  @override
-  void initState() {
-    super.initState();
-    getTodosFromDatabase();
-  }
-
   Future<List<Todo>> getTodosFromDatabase() async {
     DatabaseHelper helper = DatabaseHelper.instance;
     todoList = await helper.getAllTodo();
